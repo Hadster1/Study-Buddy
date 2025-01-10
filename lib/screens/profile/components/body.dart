@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../constants.dart';
 
 class Body extends StatelessWidget {
@@ -15,13 +15,52 @@ class Body extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: defaultPadding),
-              Text("Account Settings",
-                  style: Theme.of(context).textTheme.headlineMedium),
+              // Profile Section (Profile Image, Name, and School)
+              Row(
+                children: [
+                  // Profile Image
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.grey[200],
+                    backgroundImage: const AssetImage('assets/Illustrations/user.png'), // Use local PNG image
+                  ),
+                  const SizedBox(width: 16),
+                  // Profile Name & School
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Student Name", // Replace with user name
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        "School Name", // Replace with user school name
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                              color: titleColor.withOpacity(0.64),
+                            ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              // Section Title
+              Text(
+                "Account Settings",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               Text(
                 "Edit your profile, change password, etc.",
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: titleColor.withOpacity(0.64),
+                    ),
               ),
               const SizedBox(height: 16),
+              
+              // Profile Settings Menu
               ProfileMenuCard(
                 svgSrc: "assets/icons/profile.svg",
                 title: "Profile Information",
@@ -35,27 +74,9 @@ class Body extends StatelessWidget {
                 press: () {},
               ),
               ProfileMenuCard(
-                svgSrc: "assets/icons/card.svg",
-                title: "Payment Methods",
-                subTitle: "Add your credit & debit cards",
-                press: () {},
-              ),
-              ProfileMenuCard(
-                svgSrc: "assets/icons/marker.svg",
-                title: "Locations",
-                subTitle: "Add or remove your delivery locations",
-                press: () {},
-              ),
-              ProfileMenuCard(
-                svgSrc: "assets/icons/fb.svg",
-                title: "Add Social Account",
-                subTitle: "Add Facebook, Twitter etc ",
-                press: () {},
-              ),
-              ProfileMenuCard(
                 svgSrc: "assets/icons/share.svg",
                 title: "Refer to Friends",
-                subTitle: "Get \$10 for reffering friends",
+                subTitle: "Get \$10 for referring friends",
                 press: () {},
               ),
             ],
