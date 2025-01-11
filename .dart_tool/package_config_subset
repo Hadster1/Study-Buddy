@@ -238,6 +238,10 @@ test_api
 3.4
 file:///Users/iparvez/.pub-cache/hosted/pub.dev/test_api-0.7.3/
 file:///Users/iparvez/.pub-cache/hosted/pub.dev/test_api-0.7.3/lib/
+timer_count_down
+2.12
+file:///Users/iparvez/.pub-cache/hosted/pub.dev/timer_count_down-2.2.2/
+file:///Users/iparvez/.pub-cache/hosted/pub.dev/timer_count_down-2.2.2/lib/
 typed_data
 2.17
 file:///Users/iparvez/.pub-cache/hosted/pub.dev/typed_data-1.3.2/
@@ -274,7 +278,7 @@ xml
 2.19
 file:///Users/iparvez/.pub-cache/hosted/pub.dev/xml-6.3.0/
 file:///Users/iparvez/.pub-cache/hosted/pub.dev/xml-6.3.0/lib/
-foodly_ui
+study_buddy
 3.5
 file:///Users/iparvez/Development/Projects/Study%20Buddy/
 file:///Users/iparvez/Development/Projects/Study%20Buddy/lib/

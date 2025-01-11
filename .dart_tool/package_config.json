@@ -380,6 +380,12 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "timer_count_down",
+      "rootUri": "file:///Users/iparvez/.pub-cache/hosted/pub.dev/timer_count_down-2.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "typed_data",
       "rootUri": "file:///Users/iparvez/.pub-cache/hosted/pub.dev/typed_data-1.3.2",
       "packageUri": "lib/",
@@ -434,13 +440,13 @@
       "languageVersion": "2.19"
     },
     {
-      "name": "foodly_ui",
+      "name": "study_buddy",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2025-01-11T19:38:44.121840Z",
+  "generated": "2025-01-11T20:56:39.497880Z",
   "generator": "pub",
   "generatorVersion": "3.6.0",
   "flutterRoot": "file:///Users/iparvez/Development/flutter",

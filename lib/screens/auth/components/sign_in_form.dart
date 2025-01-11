@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodly_ui/entry_point.dart';
+import 'package:study_buddy/entry_point.dart';
 import '../../../constants.dart';
 import '../forgot_password_screen.dart';
 

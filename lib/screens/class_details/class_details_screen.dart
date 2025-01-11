@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodly_ui/screens/class_details/components/course_info.dart';
+import 'package:study_buddy/screens/class_details/components/course_info.dart';
 import '../../constants.dart';
 import 'components/featured_items.dart';
 import 'components/iteams.dart';

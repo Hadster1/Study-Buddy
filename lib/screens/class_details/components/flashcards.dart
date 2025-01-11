@@ -15,20 +15,19 @@ class _FlashcardsState extends State<Flashcards> {
   bool _isFront = true;
   List<Map<String, String>> _flashcards = [];
   final Gemini gemini = Gemini.instance;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchFlashcards();
-  }
+  bool _isLoading = false;
 
   // Function to fetch flashcards from Gemini
   Future<void> _fetchFlashcards() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     try {
       // Sending the prompt to Gemini
       final response = await gemini.chat([
         Content(parts: [
-          Part.text('Give me a list of terms and definitions for studying for computer science in this format. Do not include any unnecessary instructions as I need that format for parsing correctly.\n____________\nTerm - Definition\nTerm - Definition')
+          Part.text('Give me a list of terms and definitions for studying for Computer Science in this format. Do not include any unnecessary instructions as I need that format for parsing correctly.\n____________\nTerm - Definition\nTerm - Definition')
         ], role: 'user'),
       ]);
 
@@ -43,6 +42,10 @@ class _FlashcardsState extends State<Flashcards> {
       });
     } catch (e) {
       print('Failed to load flashcards: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -70,66 +73,76 @@ class _FlashcardsState extends State<Flashcards> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _flashcards.isEmpty
+      body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: PageView.builder(
-                    controller: _pageController,
-                    itemCount: _flashcards.length,
-                    itemBuilder: (context, index) {
-                      final flashcard = _flashcards[index];
-                      return GestureDetector(
-                        onTap: _flipCard,
-                        child: Card(
-                          margin: const EdgeInsets.all(16.0),
-                          child: Center(
-                            child: Text(
-                              _isFront ? flashcard['term']! : flashcard['definition']!,
-                              style: Theme.of(context).textTheme.headlineMedium,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
+          : _flashcards.isEmpty
+              ? Center(
+                  child: SizedBox(
+                    width: 200, // Set the desired width
+                    child: ElevatedButton(
+                      onPressed: _fetchFlashcards,
+                      child: const Text('Make Flashcards'),
+                    ),
                   ),
-                ),
-                Row(
+                )
+              : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () {
-                        if (_pageController.page! > 0) {
-                          _pageController.previousPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
+                    Expanded(
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: _flashcards.length,
+                        itemBuilder: (context, index) {
+                          final flashcard = _flashcards[index];
+                          return GestureDetector(
+                            onTap: _flipCard,
+                            child: Card(
+                              margin: const EdgeInsets.all(16.0),
+                              child: Center(
+                                child: Text(
+                                  _isFront ? flashcard['term']! : flashcard['definition']!,
+                                  style: Theme.of(context).textTheme.headlineMedium,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                           );
-                        }
-                      },
+                        },
+                      ),
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.flip),
-                      onPressed: _flipCard,
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.arrow_forward),
-                      onPressed: () {
-                        if (_pageController.page! < _flashcards.length - 1) {
-                          _pageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                        }
-                      },
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back),
+                          onPressed: () {
+                            if (_pageController.page! > 0) {
+                              _pageController.previousPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            }
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.flip),
+                          onPressed: _flipCard,
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.arrow_forward),
+                          onPressed: () {
+                            if (_pageController.page! < _flashcards.length - 1) {
+                              _pageController.nextPage(
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeInOut,
+                              );
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
     );
   }
 }

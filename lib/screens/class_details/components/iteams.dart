@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:foodly_ui/screens/chatbot/brAIny_chatbot.dart';
-import 'package:foodly_ui/screens/chatbot/feynman_chatbot.dart';
-import 'package:foodly_ui/screens/class_details/components/pomodoro.dart';
-import 'package:foodly_ui/screens/class_details/components/flashcards.dart';
+import 'package:study_buddy/screens/chatbot/brAIny_chatbot.dart';
+import 'package:study_buddy/screens/chatbot/feynman_chatbot.dart';
+import 'package:study_buddy/screens/class_details/components/pomodoro.dart';
+import 'package:study_buddy/screens/class_details/components/flashcards.dart';
 import '../../../constants.dart';
 
 
