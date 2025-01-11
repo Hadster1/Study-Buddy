@@ -74,6 +74,14 @@ flutter_chat_ui
 3.3
 file:///Users/iparvez/.pub-cache/hosted/pub.dev/flutter_chat_ui-2.0.0-dev.3/
 file:///Users/iparvez/.pub-cache/hosted/pub.dev/flutter_chat_ui-2.0.0-dev.3/lib/
+flutter_colorpicker
+2.14
+file:///Users/iparvez/.pub-cache/hosted/pub.dev/flutter_colorpicker-1.1.0/
+file:///Users/iparvez/.pub-cache/hosted/pub.dev/flutter_colorpicker-1.1.0/lib/
+flutter_countdown_timer
+2.12
+file:///Users/iparvez/.pub-cache/hosted/pub.dev/flutter_countdown_timer-4.1.0/
+file:///Users/iparvez/.pub-cache/hosted/pub.dev/flutter_countdown_timer-4.1.0/lib/
 flutter_gemini
 3.0
 file:///Users/iparvez/.pub-cache/hosted/pub.dev/flutter_gemini-3.0.0/
@@ -94,10 +102,6 @@ flutter_svg
 2.19
 file:///Users/iparvez/.pub-cache/hosted/pub.dev/flutter_svg-2.0.10+1/
 file:///Users/iparvez/.pub-cache/hosted/pub.dev/flutter_svg-2.0.10+1/lib/
-flutter_timer_countdown
-2.12
-file:///Users/iparvez/.pub-cache/hosted/pub.dev/flutter_timer_countdown-1.0.7/
-file:///Users/iparvez/.pub-cache/hosted/pub.dev/flutter_timer_countdown-1.0.7/lib/
 form_field_validator
 2.12
 file:///Users/iparvez/.pub-cache/hosted/pub.dev/form_field_validator-1.1.0/
