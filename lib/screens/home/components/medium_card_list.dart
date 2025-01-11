@@ -4,7 +4,7 @@ import '../../../components/cards/medium/restaurant_info_medium_card.dart';
 import '../../../components/scalton/medium_card_scalton.dart';
 import '../../../constants.dart';
 import '../../../demo_data.dart';
-import '../../details/details_screen.dart';
+import '../../class_details/class_details_screen.dart';
 
 class MediumCardList extends StatefulWidget {
   const MediumCardList({super.key});

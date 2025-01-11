@@ -5,7 +5,7 @@ import '../../components/section_title.dart';
 import '../../constants.dart';
 import '../../demo_data.dart';
 import '../../screens/filter/filter_screen.dart';
-import '../details/details_screen.dart';
+import '../class_details/class_details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

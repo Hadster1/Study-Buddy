@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../../constants.dart';
 import 'featured_item_card.dart';
+import '../../../constants.dart';
 
 class FeaturedItems extends StatelessWidget {
   const FeaturedItems({
@@ -15,7 +14,7 @@ class FeaturedItems extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-          child: Text("Featured Items",
+          child: Text("Course Resources",
               style: Theme.of(context).textTheme.titleLarge),
         ),
         const SizedBox(height: defaultPadding / 2),
@@ -28,11 +27,12 @@ class FeaturedItems extends StatelessWidget {
                 (index) => Padding(
                   padding: const EdgeInsets.only(left: defaultPadding),
                   child: FeaturedItemCard(
-                    title: "Cookie Sandwich",
-                    image: "assets/images/featured _items_${index + 1}.png",
-                    foodType: "Chines",
-                    priceRange: "\$" * 2,
-                    press: () {},
+                    title: courseTitles[index],
+                    image: courseImages[index],
+                    description: courseDescriptions[index],
+                    press: () {
+                      // Add your navigation or action here
+                    },
                   ),
                 ),
               ),
@@ -44,3 +44,21 @@ class FeaturedItems extends StatelessWidget {
     );
   }
 }
+
+const List<String> courseTitles = [
+  "Course Outline",
+  "Textbook",
+  "Discussion Questions"
+];
+
+const List<String> courseImages = [
+  "assets/images/course_outline.png",
+  "assets/images/textbook.png",
+  "assets/images/discussion_questions.png"
+];
+
+const List<String> courseDescriptions = [
+  "View the course outline",
+  "Access the textbook",
+  "Join the discussion"
+];

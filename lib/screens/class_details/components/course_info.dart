@@ -4,8 +4,8 @@ import '../../../components/price_range_and_food_type.dart';
 import '../../../components/rating_with_counter.dart';
 import '../../../constants.dart';
 
-class RestaurantInfo extends StatelessWidget {
-  const RestaurantInfo({
+class ClassInfo extends StatelessWidget {
+  const ClassInfo({
     super.key,
   });
 
@@ -16,38 +16,54 @@ class RestaurantInfo extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Course Code and Name
           Text(
             "COMPSCI ----",
             style: Theme.of(context).textTheme.headlineMedium,
             maxLines: 1,
           ),
           const SizedBox(height: defaultPadding / 2),
+          Text(
+            "Introduction to Computer Science",
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 18),
+            maxLines: 1,
+          ),
           const SizedBox(height: defaultPadding),
+
+          // Instructor Name
+          Text(
+            "Instructor: Dr. Prof Name",
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 16),
+            maxLines: 1,
+          ),
+          const SizedBox(height: defaultPadding / 2),
+
+          // Class Days and Timings
           Row(
             children: [
-              const DeliveryInfo(
-                iconSrc: "assets/icons/delivery.svg",
-                text: "Free",
-                subText: "Delivery",
-              ),
-              const SizedBox(width: defaultPadding),
-              const DeliveryInfo(
-                iconSrc: "assets/icons/clock.svg",
-                text: "25",
-                subText: "Minutes",
-              ),
-              const Spacer(),
-              OutlinedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text("Take away"),
+              Icon(Icons.access_time, size: 18), // Clock Icon
+              const SizedBox(width: 8),
+              Text(
+                "Mon, Wed, Fri - 10:00 AM - 12:00 PM",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 16),
               ),
             ],
           ),
+          const SizedBox(height: defaultPadding / 2),
+
+          // Classroom/Room Info
+          Row(
+            children: [
+              Icon(Icons.location_on, size: 18), // Location Icon
+              const SizedBox(width: 8),
+              Text(
+                "Room: B101",
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 16),
+              ),
+            ],
+          ),
+          const SizedBox(height: defaultPadding / 2),
+
         ],
       ),
     );
