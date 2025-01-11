@@ -158,6 +158,12 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "flutter_timer_countdown",
+      "rootUri": "file:///Users/iparvez/.pub-cache/hosted/pub.dev/flutter_timer_countdown-1.0.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "form_field_validator",
       "rootUri": "file:///Users/iparvez/.pub-cache/hosted/pub.dev/form_field_validator-1.1.0",
       "packageUri": "lib/",
@@ -428,7 +434,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2025-01-08T18:09:50.024702Z",
+  "generated": "2025-01-11T18:50:10.461797Z",
   "generator": "pub",
   "generatorVersion": "3.6.0",
   "flutterRoot": "file:///Users/iparvez/Development/flutter",

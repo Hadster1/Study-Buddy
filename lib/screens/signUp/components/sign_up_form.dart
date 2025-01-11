@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../phoneLogin/phone_login_screen.dart';
-import '../../findRestaurants/find_restaurants_screen.dart';
 import '../../../entry_point.dart';
 
 import '../../../constants.dart';

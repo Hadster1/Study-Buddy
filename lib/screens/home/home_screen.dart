@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../../components/cards/big/restaurant_info_big_card.dart';
 import '../../components/section_title.dart';
 import '../../constants.dart';
-import '../../demo_data.dart';
 import '../../screens/filter/filter_screen.dart';
 import '../class_details/class_details_screen.dart';
 

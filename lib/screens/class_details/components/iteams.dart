@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:foodly_ui/screens/chatbot/brAIny_chatbot.dart';
 import 'package:foodly_ui/screens/chatbot/feynman_chatbot.dart';
 import 'package:foodly_ui/screens/class_details/components/pomodoro.dart';
-import '../../../components/cards/iteam_card.dart';
+import 'package:foodly_ui/screens/class_details/components/flashcards.dart';
 import '../../../constants.dart';
-import '../../addToOrder/add_to_order_screen.dart';
 
 
 class Items extends StatefulWidget {
@@ -43,14 +42,13 @@ class _ItemsState extends State<Items> {
               ),
               const SizedBox(height: defaultPadding),
               const SizedBox(
-                height: 400, // Adjust height as needed
+                height: 450, // Adjust height as needed
                 child: TabBarView(
                   children: [
                     brAIny_ChatbotScreen(),
                     FeynmanChatbot(),
-                    Center(child: Text("Flashcards")),
+                    Flashcards(),
                     PomodoroTimer(),
-                    Center(child: Text("Loiter")),
                   ],
                 ),
               ),
@@ -74,8 +72,5 @@ final List<Tab> demoTabs = <Tab>[
   ),
   const Tab(
     child: Text('Pomodoro Timer'),
-  ),
-  const Tab(
-    child: Text('Loiter'),
   ),
 ];

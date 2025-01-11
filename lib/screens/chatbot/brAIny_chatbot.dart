@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import 'package:flutter_gemini/flutter_gemini.dart';
-
-import '../../components/buttons/primary_button.dart';
-import '../../constants.dart';
 
 const String geminiApiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyC7-WRAIvBt-m8dGAR_9ifboHGoWfw9MSo';  // Placeholder URL
 const String apiKey = 'AIzaSyD_aIsfF0GxOCVKMjD8dYhHSslcd56qG20';  // Replace with your Gemini API key
