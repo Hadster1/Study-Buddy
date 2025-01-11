@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../components/price_range_and_food_type.dart';
-import '../../../components/rating_with_counter.dart';
 import '../../../constants.dart';
 
 class ClassInfo extends StatelessWidget {

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:foodly_ui/screens/class_details/components/course_info.dart';
-
 import '../../constants.dart';
-import '../calendar/calendar_screen.dart';
 import 'components/featured_items.dart';
 import 'components/iteams.dart';
-import 'components/course_info.dart';
 import 'components/timeline.dart';
 
 class DetailsScreen extends StatelessWidget {

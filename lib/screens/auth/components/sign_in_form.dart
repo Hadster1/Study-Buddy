@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/entry_point.dart';
-import '../../findRestaurants/find_restaurants_screen.dart';
-
 import '../../../constants.dart';
 import '../forgot_password_screen.dart';
 

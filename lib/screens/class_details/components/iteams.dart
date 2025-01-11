@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:foodly_ui/screens/chatbot/brAIny_chatbot.dart';
+import 'package:foodly_ui/screens/chatbot/feynman_chatbot.dart';
+import 'package:foodly_ui/screens/class_details/components/pomodoro.dart';
 import '../../../components/cards/iteam_card.dart';
 import '../../../constants.dart';
 import '../../addToOrder/add_to_order_screen.dart';
+
 
 class Items extends StatefulWidget {
   const Items({super.key});
@@ -21,6 +25,13 @@ class _ItemsState extends State<Items> {
           length: demoTabs.length,
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.only(top: defaultPadding),
+                child: Text(
+                  "Study Tools",
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
               TabBar(
                 isScrollable: true,
                 unselectedLabelColor: titleColor,
@@ -35,10 +46,10 @@ class _ItemsState extends State<Items> {
                 height: 400, // Adjust height as needed
                 child: TabBarView(
                   children: [
-                    Center(child: Text("AI Study Buddy (brAIny)")),
-                    Center(child: Text("Feynman Technique")),
+                    brAIny_ChatbotScreen(),
+                    FeynmanChatbot(),
                     Center(child: Text("Flashcards")),
-                    Center(child: Text("Pomodoro Timer")),
+                    PomodoroTimer(),
                     Center(child: Text("Loiter")),
                   ],
                 ),
