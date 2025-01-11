@@ -113,7 +113,7 @@ final List<NeatCleanCalendarEvent> _eventList = [
           _showAddEventDialog(context);
         },
         child: const Icon(Icons.add),
-        backgroundColor: Colors.green,
+        backgroundColor: primaryColor,
       ),
     );
   }
@@ -167,77 +167,89 @@ final List<NeatCleanCalendarEvent> _eventList = [
                     },
                   ),
                   TextFormField(
+                    decoration: const InputDecoration(labelText: 'Course/Class'),
+                    onSaved: (value) {
+                      eventName = value!;
+                    }
+                  ),
+                  TextFormField(
                     decoration: const InputDecoration(labelText: 'Location'),
                     onSaved: (value) {
                       location = value!;
                     },
                   ),
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'Start date and time'),
-                        onTap: () async {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          final pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2101),
-                          );
-                          if (pickedDate != null) {
-                            final pickedTime = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.fromDateTime(DateTime.now()),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'Start date and time'),
+                    onTap: () async {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      final pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2101),
+                      );
+                      if (pickedDate != null) {
+                        final pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(DateTime.now()),
+                        );
+                        if (pickedTime != null) {
+                          setState(() {
+                            startDate = DateTime(
+                              pickedDate.year,
+                              pickedDate.month,
+                              pickedDate.day,
+                              pickedTime.hour,
+                              pickedTime.minute,
                             );
-                            if (pickedTime != null) {
-                              setState(() {
-                                startDate = DateTime(
-                                  pickedDate.year,
-                                  pickedDate.month,
-                                  pickedDate.day,
-                                  pickedTime.hour,
-                                  pickedTime.minute,
-                                );
-                              });
-                            }
+                          });
+                        }
+                      }
+                    },
+                    readOnly: true,
+                    controller: TextEditingController(
+                      text: startDate != null ? startDate!.toLocal().toString() : '',
+                    ),
+                        validator: (value) {
+                          if (startDate == null) {
+                            return 'Please select a start date and time';
                           }
+                          return null;
                         },
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text: startDate != null ? startDate!.toLocal().toString() : '',
-                        ),
                       ),
-                      TextFormField(
-                        decoration: const InputDecoration(labelText: 'End date and time'),
-                        onTap: () async {
-                          FocusScope.of(context).requestFocus(FocusNode());
-                          final pickedDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2101),
-                          );
-                          if (pickedDate != null) {
-                            final pickedTime = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.fromDateTime(DateTime.now()),
+                  TextFormField(
+                    decoration: const InputDecoration(labelText: 'End date and time'),
+                    onTap: () async {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      final pickedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime(2101),
+                      );
+                      if (pickedDate != null) {
+                        final pickedTime = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(DateTime.now()),
+                        );
+                        if (pickedTime != null) {
+                          setState(() {
+                            endDate = DateTime(
+                              pickedDate.year,
+                              pickedDate.month,
+                              pickedDate.day,
+                              pickedTime.hour,
+                              pickedTime.minute,
                             );
-                            if (pickedTime != null) {
-                              setState(() {
-                                endDate = DateTime(
-                                  pickedDate.year,
-                                  pickedDate.month,
-                                  pickedDate.day,
-                                  pickedTime.hour,
-                                  pickedTime.minute,
-                                );
-                              });
-                            }
-                          }
-                        },
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text: endDate != null ? endDate!.toLocal().toString() : '',
-                        ),
-                      ),
+                          });
+                        }
+                      }
+                    },
+                    readOnly: true,
+                    controller: TextEditingController(
+                      text: endDate != null ? endDate!.toLocal().toString() : '',
+                    ),
+                  ),
                   DropdownButtonFormField<String>(
                     decoration: const InputDecoration(labelText: 'Recurrence'),
                     value: recurrence,

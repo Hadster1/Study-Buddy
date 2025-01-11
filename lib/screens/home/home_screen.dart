@@ -61,6 +61,234 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
       ),
+    floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showAddCourseDialog(context);
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: primaryColor,
+      ),
+    );
+  }
+
+    // Method to show dialog for adding a new course
+    void _showAddCourseDialog(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+    String courseCode = '';
+    String courseName = '';
+    String professor = '';
+    String room = '';
+    String schedule = '';
+    DateTime? homeworkDue;
+    DateTime? midtermDate;
+    DateTime? finalExamDate;
+    List<String> selectedDays = [];
+    TimeOfDay selectedTime = TimeOfDay.now();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Builder(
+            builder: (context) {
+              return Container(
+                padding: const EdgeInsets.all(16),
+                width: MediaQuery.of(context).size.width * 0.8, // 80% of screen width
+                child: SingleChildScrollView( // Wrap the entire dialog in a scrollable view
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Add New Course', style: TextStyle(color: Colors.black, fontSize: 18)),
+                      const SizedBox(height: 16),
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              decoration: const InputDecoration(labelText: 'Course Code'),
+                              onSaved: (value) {
+                                courseCode = value!;
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the course code';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              decoration: const InputDecoration(labelText: 'Course Name'),
+                              onSaved: (value) {
+                                courseName = value!;
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter the course name';
+                                }
+                                return null;
+                              },
+                            ),
+                            TextFormField(
+                              decoration: const InputDecoration(labelText: 'Professor'),
+                              onSaved: (value) {
+                                professor = value!;
+                              },
+                            ),
+                            TextFormField(
+                              decoration: const InputDecoration(labelText: 'Room'),
+                              onSaved: (value) {
+                                room = value!;
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                        
+                            // Days Selection with Checkboxes
+                            const Text('Select Days'),
+                            Column(
+                              children: List.generate(
+                                7, // 7 days of the week
+                                (index) {
+                                  final days = [
+                                    'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+                                  ];
+                                  return CheckboxListTile(
+                                    title: Text(days[index]),
+                                    value: selectedDays.contains(days[index]),
+                                    onChanged: (bool? value) {
+                                      if (value != null) {
+                                        if (value) {
+                                          selectedDays.add(days[index]);
+                                        } else {
+                                          selectedDays.remove(days[index]);
+                                        }
+                                      }
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                        
+                            // Time Picker to select class time
+                            Row(
+                              children: [
+                                const Text('Class Time: '),
+                                TextButton(
+                                  onPressed: () async {
+                                    final TimeOfDay? pickedTime = await showTimePicker(
+                                      context: context,
+                                      initialTime: selectedTime,
+                                    );
+                                    if (pickedTime != null && pickedTime != selectedTime) {
+                                      selectedTime = pickedTime;
+                                    }
+                                  },
+                                  child: Text(
+                                    selectedTime.format(context), // Display selected time
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                        
+                            // Homework Due Date
+                            TextFormField(
+                              decoration: const InputDecoration(labelText: 'Homework Due Date'),
+                              onTap: () async {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                final pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2101),
+                                );
+                                if (pickedDate != null) {
+                                  homeworkDue = pickedDate;
+                                }
+                              },
+                              readOnly: true,
+                              controller: TextEditingController(
+                                text: homeworkDue != null ? homeworkDue!.toLocal().toString() : '',
+                              ),
+                            ),
+                            // Midterm Date
+                            TextFormField(
+                              decoration: const InputDecoration(labelText: 'Midterm Date'),
+                              onTap: () async {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                final pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2101),
+                                );
+                                if (pickedDate != null) {
+                                  midtermDate = pickedDate;
+                                }
+                              },
+                              readOnly: true,
+                              controller: TextEditingController(
+                                text: midtermDate != null ? midtermDate!.toLocal().toString() : '',
+                              ),
+                            ),
+                            // Final Exam Date
+                            TextFormField(
+                              decoration: const InputDecoration(labelText: 'Final Exam Date'),
+                              onTap: () async {
+                                FocusScope.of(context).requestFocus(FocusNode());
+                                final pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2101),
+                                );
+                                if (pickedDate != null) {
+                                  finalExamDate = pickedDate;
+                                }
+                              },
+                              readOnly: true,
+                              controller: TextEditingController(
+                                text: finalExamDate != null ? finalExamDate!.toLocal().toString() : '',
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+                                // You can now save the course details and update the UI
+                                // For example, saving the course data to a list or database
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            child: const Text('Save'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }
