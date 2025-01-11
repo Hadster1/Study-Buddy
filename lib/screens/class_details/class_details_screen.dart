@@ -7,6 +7,7 @@ import '../calendar/calendar_screen.dart';
 import 'components/featured_items.dart';
 import 'components/iteams.dart';
 import 'components/course_info.dart';
+import 'components/timeline.dart';
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({super.key});
@@ -40,6 +41,9 @@ class DetailsScreen extends StatelessWidget {
               ClassInfo(),
               SizedBox(height: defaultPadding),
               FeaturedItems(),
+              SizedBox(height: defaultPadding),
+              Timeline(),
+              SizedBox(height: defaultPadding),
               Items(),
             ],
           ),
