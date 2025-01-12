@@ -66,33 +66,6 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: defaultPadding),
-              kOrText,
-              const SizedBox(height: defaultPadding),
-
-              // Facebook
-              SocalButton(
-                press: () {},
-                text: "Connect with Facebook",
-                color: const Color(0xFF395998),
-                icon: SvgPicture.asset(
-                  'assets/icons/facebook.svg',
-                  colorFilter: const ColorFilter.mode(
-                    Color(0xFF395998),
-                    BlendMode.srcIn,
-                  ),
-                ),
-              ),
-              const SizedBox(height: defaultPadding),
-
-              // Google
-              SocalButton(
-                press: () {},
-                text: "Connect with Google",
-                color: const Color(0xFF4285F4),
-                icon: SvgPicture.asset(
-                  'assets/icons/google.svg',
-                ),
-              ),
               const SizedBox(height: defaultPadding),
             ],
           ),

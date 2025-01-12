@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'featured_item_card.dart';
 import '../../../constants.dart';
 
+import '../../../providers/course_model.dart';
+
 class FeaturedItems extends StatelessWidget {
-  const FeaturedItems({
-    super.key,
-  });
+  final Course course;
+  const FeaturedItems({super.key, required this.course});
 
   @override
   Widget build(BuildContext context) {

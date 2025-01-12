@@ -5,9 +5,12 @@ import 'package:study_buddy/screens/class_details/components/pomodoro.dart';
 import 'package:study_buddy/screens/class_details/components/flashcards.dart';
 import '../../../constants.dart';
 
+import '../../../providers/course_model.dart';
+
 
 class Items extends StatefulWidget {
-  const Items({super.key});
+  final Course course;
+  const Items({super.key, required this.course});
 
   @override
   State<Items> createState() => _ItemsState();
@@ -41,13 +44,13 @@ class _ItemsState extends State<Items> {
                 tabs: demoTabs,
               ),
               const SizedBox(height: defaultPadding),
-              const SizedBox(
-                height: 450, // Adjust height as needed
+              SizedBox(
+                height: 550, // Adjust height as needed
                 child: TabBarView(
                   children: [
-                    brAIny_ChatbotScreen(),
-                    FeynmanChatbot(),
-                    Flashcards(),
+                    brAIny_ChatbotScreen(course: widget.course),
+                    FeynmanChatbot(course: widget.course),
+                    Flashcards(course: widget.course),
                     PomodoroTimer(),
                   ],
                 ),

@@ -5,6 +5,7 @@ import 'components/featured_items.dart';
 import 'components/iteams.dart';
 import 'components/timeline.dart';
 import '../../providers/course_model.dart';
+import '../../providers/course_model.dart';
 
 class DetailsScreen extends StatelessWidget {
   final Course course;
@@ -15,35 +16,21 @@ class DetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: const [
-          /* IconButton(
-            icon: SvgPicture.asset("assets/icons/share.svg"),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: SvgPicture.asset("assets/icons/search.svg"),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const CalendarScreen(),
-              ),
-            ),
-          ),*/
-        ],
-      ), 
-      body: const SafeArea(
+        actions: const [],
+      ),
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: defaultPadding / 2),
-              ClassInfo(),
+              ClassInfo(course: course),  // Pass the course to ClassInfo
               SizedBox(height: defaultPadding),
-              FeaturedItems(),
+              FeaturedItems(course: course), // Pass the course to other widgets if needed
               SizedBox(height: defaultPadding),
-              Timeline(),
+              Timeline(course: course), // Same for Timeline widget
               SizedBox(height: defaultPadding),
-              Items(),
+              Items(course: course), // Pass course to Items widget
             ],
           ),
         ),

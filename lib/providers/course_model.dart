@@ -1,6 +1,7 @@
 class Course {
   final int courseId;
   final int userId;
+  final String email;
   final String courseCode;
   final String courseName;
   final String profName;
@@ -17,6 +18,7 @@ class Course {
   Course({
     required this.courseId,
     required this.userId,
+    required this.email,
     required this.courseCode,
     required this.courseName,
     required this.profName,

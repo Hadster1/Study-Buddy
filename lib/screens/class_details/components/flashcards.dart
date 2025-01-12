@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
+import '../../../providers/course_model.dart';
 
 const String apiKey = 'AIzaSyD_aIsfF0GxOCVKMjD8dYhHSslcd56qG20';  // Replace with your Gemini API key
 
 class Flashcards extends StatefulWidget {
-  const Flashcards({super.key});
+  final Course course;
+  const Flashcards({
+    super.key,
+    required this.course,  // Constructor accepts the course
+  });
 
   @override
   _FlashcardsState createState() => _FlashcardsState();
@@ -27,7 +32,7 @@ class _FlashcardsState extends State<Flashcards> {
       // Sending the prompt to Gemini
       final response = await gemini.chat([
         Content(parts: [
-          Part.text('Give me a list of terms and definitions for studying for Computer Science in this format. Do not include any unnecessary instructions as I need that format for parsing correctly.\n____________\nTerm - Definition\nTerm - Definition')
+          Part.text('Give me a list of terms and definitions for studying for ${widget.course.courseName} in this format. Do not include any unnecessary instructions as I need that format for parsing correctly.\n____________\nTerm - Definition\nTerm - Definition')
         ], role: 'user'),
       ]);
 

@@ -88,7 +88,7 @@ class _SignInFormState extends State<SignInForm> {
             : null;
 
         final user = User(
-          id: userData['id'].toString(),
+          id: userData['id'],
           name: userData['name'],
           email: userData['email'],
           university: userData['university'],

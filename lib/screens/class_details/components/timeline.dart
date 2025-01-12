@@ -1,28 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // for date formatting
 import '../../../constants.dart';
+import '../../../providers/course_model.dart';
+
 
 class Timeline extends StatefulWidget {
-  const Timeline({super.key});
+  final Course course;
+
+  const Timeline({super.key, required this.course});
 
   @override
   _TimelineState createState() => _TimelineState();
 }
 
 class _TimelineState extends State<Timeline> {
-  bool _showFurtherAhead = false; // Track if the "Show further ahead" button is pressed
+  bool _showFurtherAhead = false;
 
   @override
   Widget build(BuildContext context) {
-    // Filter events to only show those within 2 weeks
+    // Create events list based on the Course details
+    final events = [
+      {
+        "title": "Homework due",
+        "date": widget.course.homeworkDue,
+      },
+      {
+        "title": "Midterm Exam",
+        "date": widget.course.midtermDate,
+      },
+      {
+        "title": "Final Exam",
+        "date": widget.course.finalExamDate,
+      },
+    ];
+
     final upcomingEvents = events.where((event) {
-      final daysRemaining = _getDaysRemaining(event['date']);
+      final daysRemaining = _getDaysRemaining(DateTime.parse(event['date'] ?? ''));
       return daysRemaining >= 0 && daysRemaining <= 14;
     }).toList();
 
-    // Separate events into upcoming and further events
     final furtherEvents = events.where((event) {
-      final daysRemaining = _getDaysRemaining(event['date']);
+      final daysRemaining = _getDaysRemaining(DateTime.parse(event['date'] ?? ''));
       return daysRemaining > 14;
     }).toList();
 
@@ -39,18 +57,18 @@ class _TimelineState extends State<Timeline> {
             ),
           ),
           const SizedBox(height: defaultPadding / 2),
-          
+
           // Display upcoming events
           ...List.generate(upcomingEvents.length, (index) {
             final event = upcomingEvents[index];
-            final daysRemaining = _getDaysRemaining(event['date']);
+            final daysRemaining = _getDaysRemaining(DateTime.parse(event['date'] ?? ''));
             return Padding(
               padding: const EdgeInsets.only(bottom: defaultPadding),
               child: Row(
                 children: [
                   Icon(
                     Icons.circle,
-                    color: index % 2 == 0 ? Colors.blue : Colors.orange, // Different color for visual distinction
+                    color: index % 2 == 0 ? Colors.blue : Colors.orange,
                     size: 10,
                   ),
                   const SizedBox(width: defaultPadding / 2),
@@ -58,11 +76,11 @@ class _TimelineState extends State<Timeline> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        event['title'],
+                        event['title'] ?? "Unknown Event", // Handle nullable title
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
                       Text(
-                        DateFormat('MMMM dd, yyyy').format(event['date']),
+                        DateFormat('MMMM dd, yyyy').format(DateTime.parse(event['date'] ?? '')),
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       const SizedBox(height: 4),
@@ -119,14 +137,14 @@ class _TimelineState extends State<Timeline> {
                   if (_showFurtherAhead) ...[
                     ...List.generate(furtherEvents.length, (index) {
                       final event = furtherEvents[index];
-                      final daysRemaining = _getDaysRemaining(event['date']);
+                      final daysRemaining = _getDaysRemaining(DateTime.parse(event['date'] ?? ''));
                       return Padding(
                         padding: const EdgeInsets.only(bottom: defaultPadding),
                         child: Row(
                           children: [
                             Icon(
                               Icons.circle,
-                              color: index % 2 == 0 ? Colors.blue : Colors.orange, // Different color for visual distinction
+                              color: index % 2 == 0 ? Colors.blue : Colors.orange,
                               size: 10,
                             ),
                             const SizedBox(width: defaultPadding / 2),
@@ -134,13 +152,13 @@ class _TimelineState extends State<Timeline> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  event['title'],
+                                  event['title'] ?? "Unknown Event", // Handle nullable title
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                                 Text(
-                                  DateFormat('MMMM dd, yyyy').format(event['date']),
+                                  DateFormat('MMMM dd, yyyy').format(DateTime.parse(event['date'] ?? '')),
                                   style: Theme.of(context).textTheme.bodySmall,
-                                ),
+                                ), 
                                 const SizedBox(height: 4),
                                 Text(
                                   "$daysRemaining days remaining",
@@ -162,34 +180,8 @@ class _TimelineState extends State<Timeline> {
     );
   }
 
-  // Method to calculate days remaining from today
   int _getDaysRemaining(DateTime eventDate) {
     final today = DateTime.now();
     return eventDate.difference(today).inDays;
   }
 }
-
-// List of events to display in the timeline
-final List<Map<String, dynamic>> events = [
-  {
-    "title": "Homework due",
-    "date": DateTime(2025, 1, 15),
-  },
-  {
-    "title": "Exam",
-    "date": DateTime(2025, 2, 14),
-  },
-  {
-    "title": "Homework due",
-    "date": DateTime(2025, 2, 28),
-  },
-  {
-    "title": "Assignment submission",
-    "date": DateTime(2025, 3, 5),
-  },
-  {
-    "title": "Final Exam",
-    "date": DateTime(2025, 4, 1),
-  },
-  // Add more events here as needed
-];

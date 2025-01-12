@@ -16,26 +16,58 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   final List<Map<String, dynamic>> _messages = [];
   final Gemini gemini = Gemini.instance;
 
-  void _sendMessage(String message) {
-  setState(() {
-    _messages.add({"message": "You: $message", "isUser": true});
-  });
+  // Hidden message providing context to the AI
+  String get _hiddenContext {
+    return """
+      You are an AI Study Assistant helping the user manage their study schedule, class-related events, assignments, and other academic-related tasks.
+      Your role is to answer questions about their calendar, upcoming assignments, and provide study-related assistance.
+    """;
+  }
 
-  gemini.chat([
-    Content(parts: [Part.text(message)], role: 'user'),
-  ]).then((response) {
+  @override
+  void initState() {
+    super.initState();
+    // Send an initial greeting message
+    _sendInitialMessage();
+  }
+
+  // Function to send the initial message
+  void _sendInitialMessage() {
     setState(() {
       _messages.add({
-        "message": response?.output ?? "No response",
+        "message": "Hi! I'm your personal AI Study Buddy. 😊\n\n"
+            "I will help you manage your classes, schedule, calendar, and more.\n\n"
+            "You can ask me questions like, 'What's my next event on my calendar?' or 'What are my upcoming assignments?'.\n\n"
+            "Let's get started! Feel free to ask me anything.",
         "isUser": false,
-        "image": "../../../assets/Illustrations/ai-mi-algorithm-svgrepo-com.svg"
       });
     });
-  }).catchError((e) {
+  }
+
+  // Function to send messages to the chatbot
+  void _sendMessage(String message) {
     setState(() {
-      _messages.add({"message": "Error: $e", "isUser": false});
+      _messages.add({"message": "You: $message", "isUser": true});
     });
-  });
+
+    // Combine the hidden context and the user's message
+    String fullMessage = "$_hiddenContext\n$message";
+
+    gemini.chat([
+      Content(parts: [Part.text(fullMessage)], role: 'user'),
+    ]).then((response) {
+      setState(() {
+        _messages.add({
+          "message": response?.output ?? "No response",
+          "isUser": false,
+          "image": "../../../assets/Illustrations/ai-mi-algorithm-svgrepo-com.svg"
+        });
+      });
+    }).catchError((e) {
+      setState(() {
+        _messages.add({"message": "Error: $e", "isUser": false});
+      });
+    });
 
   _controller.clear();
 }

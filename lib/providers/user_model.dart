@@ -1,5 +1,5 @@
 class User {
-  final String id;
+  final int id;  // Change from String to int
   final String name;
   final String email;
   final String university;
@@ -9,7 +9,7 @@ class User {
   final DateTime? graduationDate;     // Keep this nullable DateTime
 
   User({
-    required this.id,
+    required this.id,  // id is now an int
     required this.name,
     required this.email,
     required this.university,
@@ -19,10 +19,10 @@ class User {
     this.graduationDate,
   });
 
-  // This constructor will take string dates and parse them
+  // Updated constructor to handle `id` as an int
   factory User.fromDatabase(Map<String, dynamic> userData) {
     return User(
-      id: userData['id'].toString(),
+      id: userData['id'],  // Directly use the int from database
       name: userData['name'],
       email: userData['email'],
       university: userData['university'],

@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 
+import '../../providers/course_model.dart';
+
 const String geminiApiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyC7-WRAIvBt-m8dGAR_9ifboHGoWfw9MSo';  // Placeholder URL
 const String apiKey = 'AIzaSyD_aIsfF0GxOCVKMjD8dYhHSslcd56qG20';  // Replace with your Gemini API key
 
 class brAIny_ChatbotScreen extends StatefulWidget {
-  const brAIny_ChatbotScreen({super.key});
+  final Course course;
+
+  const brAIny_ChatbotScreen({
+    super.key,
+    required this.course,  // Constructor accepts the course
+  });
+
 
   @override
   _brAIny_ChatbotScreenState createState() => _brAIny_ChatbotScreenState();
@@ -16,35 +24,60 @@ class _brAIny_ChatbotScreenState extends State<brAIny_ChatbotScreen> {
   final List<Map<String, dynamic>> _messages = [];
   final Gemini gemini = Gemini.instance;
 
-  void _sendMessage(String message) {
-  setState(() {
-    _messages.add({"message": "You: $message", "isUser": true});
-  });
+  // Hidden query to customize chatbot behavior
+  String get _hiddenQuery {
+    return """
+      You are a chatbot designed to help students with their course material.
+      The class is "${widget.course.courseName}" with class code "${widget.course.courseCode}".
+      Always provide relevant information from the textbook or class material and quiz the student on the topics they are learning.
+      The textbook for this class is "${widget.course.textbook}".
+    """;
+  }
 
-  gemini.chat([
-    Content(parts: [Part.text(message)], role: 'user'),
-  ]).then((response) {
+
+  @override
+  void initState() {
+    super.initState();
+    // Add an initial message from the chatbot
+    _messages.add({
+      "message": "Hello! I'm brAIny. I'm here to help you with your course material. What topic would you like to be quizzed on today? (I can also ask you questions from your textbook)",
+      "isUser": false,
+    });
+  }
+
+  void _sendMessage(String message) {
+    // Append the hidden query to the user's input
+    final customizedMessage = "$message\n$_hiddenQuery";
+
     setState(() {
-      _messages.add({
-        "message": response?.output ?? "No response",
-        "isUser": false,
-        "image": "../../../assets/Illustrations/ai-mi-algorithm-svgrepo-com.svg"
+      _messages.add({"message": "You: $message", "isUser": true});
+    });
+
+    // Send the customized message (with hidden query) to Gemini API
+    gemini.chat([
+      Content(parts: [Part.text(customizedMessage)], role: 'user'),
+    ]).then((response) {
+      setState(() {
+        _messages.add({
+          "message": response?.output ?? "No response",
+          "isUser": false,
+          "image": "../../../assets/Illustrations/ai-mi-algorithm-svgrepo-com.svg"
+        });
+      });
+    }).catchError((e) {
+      setState(() {
+        _messages.add({"message": "Error: $e", "isUser": false});
       });
     });
-  }).catchError((e) {
-    setState(() {
-      _messages.add({"message": "Error: $e", "isUser": false});
-    });
-  });
 
-  _controller.clear();
-}
+    _controller.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Chat With brAIny"),
+        title: const Text("Study With brAIny"),
         automaticallyImplyLeading: false,
       ),
       body: Padding(
