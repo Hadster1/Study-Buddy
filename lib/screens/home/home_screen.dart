@@ -3,31 +3,61 @@ import '../../components/section_title.dart';
 import '../../constants.dart';
 import '../../screens/filter/filter_screen.dart';
 import '../class_details/class_details_screen.dart';
+import 'package:mysql1/mysql1.dart';
+import 'package:provider/provider.dart';
+import 'package:file_picker/file_picker.dart'; 
 
-class HomeScreen extends StatelessWidget {
+import '../../providers/user_provider.dart'; // Make sure this is the correct import path
+import '../../providers/user_model.dart';   // Ensure this is the correct import path
+
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  List<String> selectedDays = [];
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const SizedBox(),
-        title: Column(
-          children: [
-            Text(
-              "Study Buddy".toUpperCase(),
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .copyWith(color: primaryColor),
-            ),
-            const Text(
-              "Welcome Back --NAME--!",
-              style: TextStyle(color: Colors.black),
-            )
-          ],
-        ),
+  leading: const SizedBox(),
+  title: Column(
+    children: [
+      Text(
+        "Study Buddy".toUpperCase(),
+        style: Theme.of(context)
+            .textTheme
+            .bodySmall!
+            .copyWith(color: primaryColor),
       ),
+      Consumer<UserProvider>(
+        builder: (context, userProvider, child) {
+          // Access the User object
+          final user = userProvider.user;
+
+          // If the user is null (e.g., not logged in), show a placeholder text
+          if (user == null) {
+            return const Text(
+              "Welcome Back, Guest!",
+              style: TextStyle(color: Colors.black),
+            );
+          }
+
+          // If the user is logged in, show the user's name
+          return Text(
+            "Welcome Back, ${user.name}!",
+            style: const TextStyle(color: Colors.black),
+          );
+        },
+      ),
+    ],
+  ),
+),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -36,27 +66,42 @@ class HomeScreen extends StatelessWidget {
               SectionTitle(title: "Classes", press: () {}),
               const SizedBox(height: 16),
 
-              // Demo list of classes (You can replace it with real data)
-              ...List.generate(
-                4,  // For demo we use 4 items
-                (index) => Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                      defaultPadding, 0, defaultPadding, defaultPadding),
-                  child: ClassInfoBigCard(
-                    classCode: "COMPSCI ----",  // You can use actual class codes
-                    className: "Intro to COMPSCI",
-                    classRoom: "Room 101",
-                    professor: "Dr. Prof Name",
-                    schedule: "Sun, Tues, Thurs 10:00 AM - 11:30 AM",
-                    press: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const DetailsScreen(),
-                      ),
-                    ),
-                  ),
-                ),
-              )
+              // Display the courses the user is enrolled in
+              Consumer<UserProvider>(
+                builder: (context, userProvider, child) {
+                  final courses = userProvider.courses;
+
+                  // If no courses, display a message
+                  if (courses.isEmpty) {
+                    return const Center(
+                      child: Text('You are not enrolled in any classes yet.'),
+                    );
+                  }
+
+                  // Otherwise, display each course in a card
+                  return Column(
+                    children: courses.map((course) {
+                      return Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                            defaultPadding, 0, defaultPadding, defaultPadding),
+                        child: ClassInfoBigCard(
+                          classCode: course.courseCode,
+                          className: course.courseName,
+                          classRoom: course.roomNum,
+                          professor: course.profName,
+                          schedule: '${course.courseStart} - ${course.courseEnd}',
+                          press: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailsScreen(course: course),
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -79,10 +124,11 @@ class HomeScreen extends StatelessWidget {
     String professor = '';
     String room = '';
     String schedule = '';
+    String textbook = '';
     DateTime? homeworkDue;
     DateTime? midtermDate;
     DateTime? finalExamDate;
-    List<String> selectedDays = [];
+    
     TimeOfDay selectedTime = TimeOfDay.now();
 
     showDialog(
@@ -103,6 +149,48 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       const Text('Add New Course', style: TextStyle(color: Colors.black, fontSize: 18)),
                       const SizedBox(height: 16),
+                      // File Upload Section for Course Outline
+                      const Text('Upload Course Outline (PDF)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      
+                      GestureDetector(
+                        onTap: () async {
+                          // Pick the file using file_picker
+                          FilePickerResult? result = await FilePicker.platform.pickFiles(
+                            type: FileType.custom, 
+                            allowedExtensions: ['pdf'], // Allow only PDF files
+                          );
+
+                          if (result != null) {
+                            // Get the path of the selected file
+                            String? filePath = result.files.single.path;
+                            // You can handle the file path here, such as uploading or storing it
+                            print("Selected file path: $filePath");
+                          } else {
+                            // User canceled the picker
+                            print("No file selected");
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey),
+                          ),
+                          child: const Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.upload_file, size: 40, color: Colors.blue),
+                              SizedBox(height: 8),
+                              Text("Click to Upload", style: TextStyle(color: Colors.blue)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Form Section (Course Code, Name, etc.)
                       Form(
                         key: _formKey,
                         child: Column(
@@ -132,21 +220,30 @@ class HomeScreen extends StatelessWidget {
                               },
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(labelText: 'Professor'),
+                              decoration: const InputDecoration(labelText: 'Professor Name'),
                               onSaved: (value) {
                                 professor = value!;
                               },
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(labelText: 'Room'),
+                              decoration: const InputDecoration(labelText: 'Room Number'),
                               onSaved: (value) {
                                 room = value!;
                               },
                             ),
                             const SizedBox(height: 16),
+
+                            TextFormField(
+                              decoration: const InputDecoration(labelText: 'Textbook Name & Author'),
+                              onSaved: (value) {
+                                textbook = value!; // Store the value in the textbook variable
+                              },
+                            ),
+                            const SizedBox(height: 16),
                         
                             // Days Selection with Checkboxes
-                            const Text('Select Days'),
+                            const Text('Select Days', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 8),
                             Column(
                               children: List.generate(
                                 7, // 7 days of the week
@@ -154,17 +251,23 @@ class HomeScreen extends StatelessWidget {
                                   final days = [
                                     'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
                                   ];
-                                  return CheckboxListTile(
-                                    title: Text(days[index]),
-                                    value: selectedDays.contains(days[index]),
-                                    onChanged: (bool? value) {
-                                      if (value != null) {
-                                        if (value) {
-                                          selectedDays.add(days[index]);
-                                        } else {
-                                          selectedDays.remove(days[index]);
-                                        }
-                                      }
+                                  return StatefulBuilder(
+                                    builder: (context, setState) {
+                                      return CheckboxListTile(
+                                        title: Text(days[index]),
+                                        value: selectedDays.contains(days[index]),
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            if (value != null) {
+                                              if (value) {
+                                                selectedDays.add(days[index]);
+                                              } else {
+                                                selectedDays.remove(days[index]);
+                                              }
+                                            }
+                                          });
+                                        },
+                                      );
                                     },
                                   );
                                 },
@@ -212,7 +315,7 @@ class HomeScreen extends StatelessWidget {
                               },
                               readOnly: true,
                               controller: TextEditingController(
-                                text: homeworkDue != null ? homeworkDue!.toLocal().toString() : '',
+                                text: homeworkDue != null ? homeworkDue!.toLocal().toString().split(' ')[0] : '',
                               ),
                             ),
                             // Midterm Date
@@ -252,7 +355,7 @@ class HomeScreen extends StatelessWidget {
                               },
                               readOnly: true,
                               controller: TextEditingController(
-                                text: finalExamDate != null ? finalExamDate!.toLocal().toString() : '',
+                                text: finalExamDate != null ? finalExamDate!.toLocal().toString().split(' ')[0] : '',
                               ),
                             ),
                           ],
@@ -272,9 +375,33 @@ class HomeScreen extends StatelessWidget {
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
-                                // You can now save the course details and update the UI
-                                // For example, saving the course data to a list or database
-                                Navigator.of(context).pop();
+                                
+                                // Call the method to insert the course into the database
+                                Provider.of<UserProvider>(context, listen: false)
+                                    .addCourse(
+                                  courseCode: courseCode,
+                                  courseName: courseName,
+                                  profName: professor,
+                                  textbook: textbook,
+                                  roomNum: room,
+                                  selectedDays: selectedDays,
+                                  courseStart: "2025-01-01",
+                                  courseEnd: "2025-01-31",
+                                  topics: "Testing",
+                                  homeworkDue: homeworkDue?.toIso8601String() ?? '',
+                                  midtermDate: midtermDate?.toIso8601String() ?? '',
+                                  finalExamDate: finalExamDate?.toIso8601String() ?? '',
+                                  courseConfidence: 0,
+                                ).then((_) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Course added successfully')),
+                                  );
+                                  Navigator.of(context).pop();
+                                }).catchError((error) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Error: $error')),
+                                  );
+                                });
                               }
                             },
                             child: const Text('Save'),

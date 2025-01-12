@@ -76,12 +76,11 @@ class _SignInFormState extends State<SignInForm> {
                 _formKey.currentState!.save();
 
                 // just for demo
-                Navigator.pushAndRemoveUntil(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const EntryPoint(),
                   ),
-                  (_) => true,
                 );
               }
             },

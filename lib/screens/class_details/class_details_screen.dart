@@ -4,9 +4,12 @@ import '../../constants.dart';
 import 'components/featured_items.dart';
 import 'components/iteams.dart';
 import 'components/timeline.dart';
+import '../../providers/course_model.dart';
 
 class DetailsScreen extends StatelessWidget {
-  const DetailsScreen({super.key});
+  final Course course;
+
+  const DetailsScreen({super.key, required this.course});
 
   @override
   Widget build(BuildContext context) {

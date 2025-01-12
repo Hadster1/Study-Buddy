@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../constants.dart';
+import '../../../main.dart';
+import 'package:provider/provider.dart';
+import '../../../providers/user_provider.dart'; // Import the UserProvider for logout functionality
 
 class Body extends StatelessWidget {
   const Body({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Get the current user from the UserProvider
+    final user = Provider.of<UserProvider>(context).user;
+
     return SafeArea(
       child: SingleChildScrollView(
         child: Padding(
@@ -30,14 +36,14 @@ class Body extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Student Name", // Replace with user name
+                        user != null ? user.name : "Student Name", // Display the actual name if user is available
                         style: Theme.of(context).textTheme.titleMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "School Name", // Replace with user school name
+                        user != null ? user.university : "School Name", // Display the actual university if user is available
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: titleColor.withOpacity(0.64),
                             ),
@@ -78,6 +84,20 @@ class Body extends StatelessWidget {
                 title: "Refer to Friends",
                 subTitle: "Get \$10 for referring friends",
                 press: () {},
+              ),
+              // Log Out Button
+              ProfileMenuCard(
+                svgSrc: "assets/icons/logout.svg", // You can create a logout icon or use an existing one
+                title: "Log Out",
+                subTitle: "Log out from your account",
+                press: () {
+                  // Log out logic here
+                  // Clear user data from provider
+                  Provider.of<UserProvider>(context, listen: false).clearUser();
+                  
+                  // Optionally navigate to the sign-in screen
+                  Navigator.pushReplacementNamed(context, '/sign_in');
+                },
               ),
             ],
           ),
