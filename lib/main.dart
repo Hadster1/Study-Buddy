@@ -9,11 +9,13 @@ import 'package:provider/provider.dart'; // Import the provider package
 import 'providers/user_provider.dart'; // Import your UserProvider
 
 import 'package:flutter_gemini/flutter_gemini.dart';
+import 'package:flutter_cohere/flutter_cohere.dart';
 
 const apiKey = 'AIzaSyD_aIsfF0GxOCVKMjD8dYhHSslcd56qG20';
 
 void main() {
   Gemini.init(apiKey: apiKey);
+  var co = CohereClient(apiKey: 'A2I0yLDFFfRXQedOxN6xkor3mQkIH1SIYh7Twd1V');
   runApp(
     ChangeNotifierProvider(
       create: (context) => UserProvider(),

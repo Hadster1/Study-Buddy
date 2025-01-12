@@ -82,7 +82,7 @@ class Body extends StatelessWidget {
               ProfileMenuCard(
                 svgSrc: "assets/icons/share.svg",
                 title: "Refer to Friends",
-                subTitle: "Get \$10 for referring friends",
+                subTitle: "Share the app",
                 press: () {},
               ),
               // Log Out Button

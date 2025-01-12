@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../constants.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-
-
 import 'package:flutter_neat_and_clean_calendar/flutter_neat_and_clean_calendar.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -16,6 +14,9 @@ class CalendarScreen extends StatefulWidget {
 class _CalendarScreenState extends State<CalendarScreen> {
   bool _showSearchResult = false;
   bool _isLoading = true;
+
+  // Start with an empty list of events
+  final List<NeatCleanCalendarEvent> _eventList = [];
 
   @override
   void initState() {
@@ -39,54 +40,28 @@ class _CalendarScreenState extends State<CalendarScreen> {
     });
   }
 
-
-final List<NeatCleanCalendarEvent> _eventList = [
-  NeatCleanCalendarEvent('MultiDay Event A',
-      startTime: DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day, 10, 0),
-      endTime: DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day + 2, 12, 0),
-      color: Colors.orange,
-      isMultiDay: true),
-  NeatCleanCalendarEvent('Allday Event B',
-      startTime: DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day - 2, 14, 30),
-      endTime: DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day + 2, 17, 0),
-      color: Colors.pink,
-      isAllDay: true),
-  NeatCleanCalendarEvent('Normal Event D',
-      startTime: DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day, 14, 30),
-      endTime: DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day, 17, 0),
-      color: Colors.indigo),
-];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),  // Use a constant for padding if defined
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
               Text('Calendar', style: Theme.of(context).textTheme.headlineMedium),
               const SizedBox(height: 20),
-              const SearchForm(), // Assuming this is a custom widget, keep it if needed
+              const SearchForm(),
               Text(
                 _showSearchResult ? "Search Calendar" : "",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              
-              // Add the Calendar Widget below your other widgets
               Expanded(
                 child: Calendar(
                   startOnMonday: true,
-                  weekDays: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'],
-                  eventsList: _eventList,
+                  weekDays: ['Mo', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'],
+                  eventsList: _eventList, // Pass the empty list to start
                   isExpandable: true,
                   eventDoneColor: Colors.green,
                   selectedColor: Colors.pink,
@@ -117,6 +92,7 @@ final List<NeatCleanCalendarEvent> _eventList = [
       ),
     );
   }
+
   void _showAddEventDialog(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
     String eventName = '';
@@ -167,12 +143,6 @@ final List<NeatCleanCalendarEvent> _eventList = [
                     },
                   ),
                   TextFormField(
-                    decoration: const InputDecoration(labelText: 'Course/Class'),
-                    onSaved: (value) {
-                      eventName = value!;
-                    }
-                  ),
-                  TextFormField(
                     decoration: const InputDecoration(labelText: 'Location'),
                     onSaved: (value) {
                       location = value!;
@@ -210,13 +180,13 @@ final List<NeatCleanCalendarEvent> _eventList = [
                     controller: TextEditingController(
                       text: startDate != null ? startDate!.toLocal().toString() : '',
                     ),
-                        validator: (value) {
-                          if (startDate == null) {
-                            return 'Please select a start date and time';
-                          }
-                          return null;
-                        },
-                      ),
+                    validator: (value) {
+                      if (startDate == null) {
+                        return 'Please select a start date and time';
+                      }
+                      return null;
+                    },
+                  ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: 'End date and time'),
                     onTap: () async {
@@ -250,22 +220,6 @@ final List<NeatCleanCalendarEvent> _eventList = [
                       text: endDate != null ? endDate!.toLocal().toString() : '',
                     ),
                   ),
-                  DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(labelText: 'Recurrence'),
-                    value: recurrence,
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        recurrence = newValue!;
-                      });
-                    },
-                    items: <String>['Once', 'Daily', 'Weekly', 'Bi-Weekly', 'Monthly', 'Yearly']
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
                 ],
               ),
             ),
@@ -281,8 +235,18 @@ final List<NeatCleanCalendarEvent> _eventList = [
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   _formKey.currentState!.save();
-                  // Save the event details
-                  // Add your logic to save the event details to the calendar
+                  // Add the new event to the event list
+                  if (startDate != null && endDate != null && eventName.isNotEmpty) {
+                    setState(() {
+                      _eventList.add(NeatCleanCalendarEvent(
+                        eventName,
+                        description: location, 
+                        startTime: startDate!,
+                        endTime: endDate!,
+                        color: eventColor,
+                      ));
+                    });
+                  }
                   Navigator.of(context).pop();
                 }
               },
@@ -331,6 +295,7 @@ class SearchForm extends StatefulWidget {
 
 class _SearchFormState extends State<SearchForm> {
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -338,30 +303,19 @@ class _SearchFormState extends State<SearchForm> {
       child: TextFormField(
         onChanged: (value) {
           // get data while typing
-          // if (value.length >= 3) showResult();
         },
-        onFieldSubmitted: (value) {
-          if (_formKey.currentState!.validate()) {
-            // If all data are correct then save data to out variables
-            _formKey.currentState!.save();
-
-            // Once user pree on submit
-          } else {}
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Please enter some text';
+          }
+          return null;
         },
-        validator: requiredValidator.call,
-        style: Theme.of(context).textTheme.labelLarge,
-        textInputAction: TextInputAction.search,
         decoration: InputDecoration(
           hintText: "Search Calendar",
-          contentPadding: kTextFieldPadding,
           prefixIcon: Padding(
             padding: const EdgeInsets.all(8.0),
             child: SvgPicture.asset(
               'assets/icons/search.svg',
-              colorFilter: const ColorFilter.mode(
-                bodyTextColor,
-                BlendMode.srcIn,
-              ),
             ),
           ),
         ),
@@ -369,3 +323,4 @@ class _SearchFormState extends State<SearchForm> {
     );
   }
 }
+
